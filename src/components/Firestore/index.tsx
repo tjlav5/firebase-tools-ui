@@ -79,8 +79,8 @@ export const Firestore: React.FC<Props> = ({ config, projectId }) => {
     });
     if (!shouldNuke) return;
     setIsRefreshing(true);
+    history.push('/firestore');
     api.nukeDocuments().then(() => {
-      history.push('/firestore');
       setIsRefreshing(false);
     });
   }

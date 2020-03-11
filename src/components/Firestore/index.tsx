@@ -15,7 +15,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import './index.scss';
+import { LinearProgress } from '@rmwc/linear-progress';
 import { Button } from '@rmwc/button';
 import { Card } from '@rmwc/card';
 import { DialogButton } from '@rmwc/dialog';
@@ -37,6 +39,8 @@ export type Props = PropsFromState;
 
 export const Firestore: React.FC<Props> = ({ config, projectId }) => {
   const [api, setApi] = useState<DatabaseApi | undefined>(undefined);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const history = useHistory();
   const databaseId = '(default)';
 
   useEffect(() => {
@@ -74,10 +78,16 @@ export const Firestore: React.FC<Props> = ({ config, projectId }) => {
       ),
     });
     if (!shouldNuke) return;
-    api.nukeDocuments();
+    setIsRefreshing(true);
+    api.nukeDocuments().then(() => {
+      history.push('/firestore');
+      setIsRefreshing(false);
+    });
   }
 
-  return (
+  return isRefreshing ? (
+    <LinearProgress />
+  ) : (
     <ApiProvider value={api}>
       <div className="Firestore">
         <div className="Firestore-actions">

@@ -1,6 +1,7 @@
 import './Callout.scss';
 
 import { Icon } from '@rmwc/icon';
+import { Theme, ThemeProvider } from '@rmwc/theme';
 import { Typography } from '@rmwc/typography';
 import React, { ReactNode } from 'react';
 
@@ -45,14 +46,16 @@ export const Callout: React.FC<CalloutProps> = ({
   const classes = `Callout Callout-${type}${asideClass}`;
 
   return (
-    <div className={classes}>
-      <div className="Callout-body">
-        <div className="Callout-message">
-          {iconName && <Icon icon={iconName} className="Callout-icon" />}
-          <Typography use="subtitle2">{children}</Typography>
-        </div>
-      </div>
-      <div className="Callout-actions">{actions}</div>
-    </div>
+    <Theme use="primaryBg" className={classes}>
+      <ThemeProvider wrap options={aside ? {} : { primary: '#fff' }}>
+        <Theme use="primary" className="Callout-message">
+          <div className="Callout-body">
+            {iconName && <Icon icon={iconName} className="Callout-icon" />}
+            <Typography use="subtitle2">{children}</Typography>
+          </div>
+          <div className="Callout-actions">{actions}</div>
+        </Theme>
+      </ThemeProvider>
+    </Theme>
   );
 };

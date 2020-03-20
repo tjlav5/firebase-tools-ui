@@ -46,16 +46,20 @@ export const Callout: React.FC<CalloutProps> = ({
   const classes = `Callout Callout-${type}${asideClass}`;
 
   return (
-    <Theme use="primaryBg" className={classes}>
-      <ThemeProvider wrap options={aside ? {} : { primary: '#fff' }}>
-        <Theme use="primary" className="Callout-message">
-          <div className="Callout-body">
-            {iconName && <Icon icon={iconName} className="Callout-icon" />}
-            <Typography use="subtitle2">{children}</Typography>
-          </div>
+    <Theme
+      use={aside ? ['primary', 'surface'] : ['onPrimary', 'primaryBg']}
+      className={classes}
+    >
+      <div className="Callout-message">
+        <div className="Callout-body">
+          {iconName && <Icon icon={iconName} className="Callout-icon" />}
+          <Typography use="subtitle2">{children}</Typography>
+        </div>
+        {/* Make "white" the new primary, just to invert buttons from props */}
+        <ThemeProvider wrap options={aside ? {} : { primary: '#fff' }}>
           <div className="Callout-actions">{actions}</div>
-        </Theme>
-      </ThemeProvider>
+        </ThemeProvider>
+      </div>
     </Theme>
   );
 };
